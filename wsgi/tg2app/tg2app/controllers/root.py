@@ -10,8 +10,6 @@ from repoze.what import predicates
 from tg2app.lib.base import BaseController
 from tg2app.model import DBSession, metadata
 from tg2app import model
-from tg2app.controllers.secure import SecureController
-
 from tg2app.controllers.error import ErrorController
 
 __all__ = ['RootController']
@@ -31,10 +29,6 @@ class RootController(BaseController):
     must be wrapped around with :class:`tg.controllers.WSGIAppController`.
 
     """
-    secc = SecureController()
-
-    admin = AdminController(model, DBSession, config_type=TGAdminConfig)
-
     error = ErrorController()
 
     @expose('tg2app.templates.index')
@@ -43,7 +37,7 @@ class RootController(BaseController):
         return dict(page='index')
 
     @expose('tg2app.templates.homework')
-    def about(self):
+    def homework(self):
         """Handle the 'about' page."""
         return dict()
 
