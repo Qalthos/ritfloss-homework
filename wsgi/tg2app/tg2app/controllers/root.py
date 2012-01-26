@@ -42,10 +42,10 @@ class RootController(BaseController):
         """Handle the front-page."""
         return dict(page='index')
 
-    @expose('tg2app.templates.about')
+    @expose('tg2app.templates.homework')
     def about(self):
         """Handle the 'about' page."""
-        return dict(page='about')
+        return dict()
 
     @expose('tg2app.templates.environ')
     def environ(self):
