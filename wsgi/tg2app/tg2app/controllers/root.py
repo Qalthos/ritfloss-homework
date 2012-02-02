@@ -36,6 +36,28 @@ class RootController(BaseController):
         """Handle the front-page."""
         return dict(page='index')
 
+    @expose('json')
+    def get_users(self):
+        users = DBSession.query(model.User).all()
+        return {
+                'users': [user.to_json() for user in users]
+                }
+
+    @expose()
+    def add_user(self, username):
+        if len(username) != 7:
+            flash('Username must be 7 characters!')
+            redirect('/')
+
+        my_user = model.User(
+                user_name=username,
+                email_address=username + '@linkybook.com',
+                display_name='No Display Name',
+            )
+        DBSession.add(my_user)
+
+        redirect('/get_users')
+
     @expose('tg2app.templates.homework')
     def homework(self):
         """Handle the 'about' page."""
