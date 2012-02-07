@@ -45,10 +45,6 @@ class RootController(BaseController):
 
     @expose()
     def add_user(self, username):
-        if len(username) != 7:
-            flash('Username must be 7 characters!')
-            redirect('/')
-
         my_user = model.User(
                 user_name=username,
                 email_address=username + '@linkybook.com',
