@@ -29,6 +29,10 @@ if [ ! -e $OPENSHIFT_DATA_DIR/DB_INITIALIZED ]; then
     touch $OPENSHIFT_DATA_DIR/DB_INITIALIZED
 fi
 
+# If the schema has changed, this will update it.  Otherwise, it will do
+# nothing.
+paster migrate upgrade
+
 # Run the test suite automatically
 # At the moment failure does not prevent the code from getting deployed
 echo "Running the test suite"
