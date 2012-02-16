@@ -24,7 +24,7 @@ testpkgs=['WebTest >= 1.2.3',
                ]
 if sys.version_info[:2] == (2,4):
     testpkgs.extend(['hashlib', 'pysqlite'])
-    
+
 requires = [
         "Pylons==1.0",
         "WebOb==1.0.8",
@@ -44,8 +44,9 @@ requires = [
         "repoze.who==1.0.19",
         "tgext.admin >= 0.3.9",
         "tw.forms",
+        "tw2.jit",
         ]
-        
+
 if os.environ.get('OPENSHIFT_APP_NAME'):
     requires.append("mysql-python")
 

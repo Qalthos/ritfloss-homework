@@ -8,6 +8,8 @@ from tg import request
 from tg.i18n import ugettext as _, ungettext
 import tg2app.model as model
 
+from paste.deploy.converters import asbool
+
 __all__ = ['BaseController']
 
 
@@ -28,4 +30,7 @@ class BaseController(TGController):
 
         request.identity = request.environ.get('repoze.who.identity')
         tmpl_context.identity = request.identity
+
+        tmpl_context.in_production = asbool(config.get('in_production'))
+
         return TGController.__call__(self, environ, start_response)

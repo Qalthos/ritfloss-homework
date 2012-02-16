@@ -6,6 +6,11 @@
     <title>${self.title()}</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/js/ajaxing.js"></script>
+    % if tmpl_context.in_production:
+        <script type="text/javascript" src="${tg.url('/js/auth-fb.js')}"></script>
+    % else:
+        <script type="text/javascript" src="${tg.url('/js/auth-faked.js')}"></script>
+    % endif
     <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/style.css')}" />
     <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/admin.css')}" />
 </head>

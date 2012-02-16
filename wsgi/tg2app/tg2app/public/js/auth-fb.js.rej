@@ -1,0 +1,88 @@
+--- wsgi/tg2app/tg2app/public/js/auth-fb.js
++++ wsgi/tg2app/tg2app/public/js/auth-fb.js
+@@ -6,7 +6,6 @@
+   globals.appID = "285982901458261";
+ 
+   globals.logged_in_callback = function(obj) {
+-    console.log(obj);
+     if (obj.error != null) {
+       return alert("Some auth problem with facebook.  Failing.");
+     } else {
+@@ -21,7 +20,6 @@
+     var path, query, script, url;
+     globals.access_token = access_token;
+     path = "https://graph.facebook.com/me?";
+-    console.log(access_token);
+     query = $.param({
+       access_token: access_token,
+       callback: 'logged_in_callback'
+@@ -46,7 +44,11 @@
+ 
+   check_auth = function() {
+     var access_token;
+-    if (window.location.href.indexOf('waiting') !== -1) return;
++    if (window.location.href.indexOf('jit') !== -1) { return ; }
++    if (window.location.href.indexOf('waiting') !== -1) {
++      access_token = window.location.hash.substring(14).split('&')[0];
++      return spider(access_token, 'me', 0);
++    }
+     if (window.location.hash.length === 0) {
+       return force_login();
+     } else {
+@@ -55,6 +57,56 @@
+     }
+   };
+ 
++  spider = function(token, id, referring_id, depth) {
++    var url;
++
++    // Don't go forever...
++    if ( depth > 1 ) { return; }
++
++    // First, save this object to the DB.
++    url = "https://graph.facebook.com/" + id;
++    $.ajax({
++      url: url,
++      data: $.param({access_token: token}),
++      error: function(err) { /* whatever */ },
++      success: function(json) {
++        json = JSON.parse(json);
++        $.ajax({
++          url: '/do_save_fb_user',
++          data: $.param({
++            referring_id: referring_id,
++            id: json.id,
++            name: json.name,
++            access_token: token,
++          }),
++          error: function() { /* whatever */ },
++          success: function(json2) {
++            var base_id = json2.id;
++            // Okay, once that's saved to our DB, spider out save all of
++            // its friends... etc... etc..
++            url = "https://graph.facebook.com/" + base_id + "/friends";
++            $.ajax({
++              url: url,
++              data: $.param({access_token: token}),
++              error: function(err) { /* whatever */ },
++              success: function(json3) {
++                json3 = JSON.parse(json3);
++                $.each(json3.data, function(i, value) {
++                  var sometime_in_the_next_two_minutes = (
++                    Math.random()*1000*120
++                  );
++                  setTimeout(function() {
++                    spider(token, value.id, base_id, depth+1);
++                  }, sometime_in_the_next_two_minutes);
++                });
++              },
++            });
++          },
++        });
++      },
++    });
++  };
++
+   $(document).ready(check_auth);
+ 
+ }).call(this);
