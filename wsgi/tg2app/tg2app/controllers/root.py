@@ -76,7 +76,7 @@ class RootController(BaseController):
     @expose()
     def do_logout(self, name):
         query = model.Login.query.filter_by(name=name)
-        
+
         if query.count() == 0:
             # wtf...  when would this happen?
             log_message("'%s' (who DNE) tried to logout." % name)
@@ -122,7 +122,7 @@ class RootController(BaseController):
 
 
     @expose()
-    def do_login(self, name, access_token):
+    def do_login(self, name, access_token, id=None):
 
         query = model.Login.query.filter_by(name=name)
 

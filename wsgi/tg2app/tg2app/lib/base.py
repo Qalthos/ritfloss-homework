@@ -4,7 +4,7 @@
 
 from tg import TGController, tmpl_context
 from tg.render import render
-from tg import request
+from tg import request, config
 from tg.i18n import ugettext as _, ungettext
 import tg2app.model as model
 
